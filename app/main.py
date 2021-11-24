@@ -1,13 +1,11 @@
-from importlib import import_module
 import uvicorn
-
-
-import_module('app.plugins.dst_run.routes')
+import platform
 
 
 if __name__ == '__main__':
-    uvicorn.run('app.routes:app',
-                host='0.0.0.0',
+    host = '0.0.0.0' if platform.system() == 'Linux' else '127.0.0.1'
+    uvicorn.run('app:app',
+                host=host,
                 port=12599,
                 reload=True)
 
