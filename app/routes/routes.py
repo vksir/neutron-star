@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app import app
 from app.common.constants import *
 from app.crypto.crypto import Crypto
-from app.db.db import DB
+from app.db import DB
 from app.routes.models import *
 from app.routes import depends
 

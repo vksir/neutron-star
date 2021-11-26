@@ -1,15 +1,14 @@
 import datetime
-import databases
-from sqlalchemy import select, insert
-from app.db.schemas import *
-from app.routes import models
+import asyncpg
+from app.routes.models import UserInDB, Dictionary
 from app import log
 from app.common.utils import CFGParser
 
 
 class DB:
     __instance = None
-    _database = None
+    _db = None
+    _dsn = None
 
     def __new__(cls):
         if cls.__instance is None:
@@ -20,32 +19,29 @@ class DB:
     def _init(self):
         cfg_parser = CFGParser()
         username, password, host, db_name = cfg_parser.get_db_account()
-        databases_sql = f'postgresql://{username}:{password}@{host}/{db_name}'
-        self._database = databases.Database(databases_sql)
+        self._dsn = f'postgresql://{username}:{password}@{host}/{db_name}'
 
     @classmethod
     async def connect(cls):
-        await cls()._database.connect()
+        cls()._db = await asyncpg.create_pool(cls()._dsn, max_size=16)
 
     @classmethod
     async def disconnect(cls):
-        await cls()._database.disconnect()
+        await cls()._db.close()
 
     @classmethod
     async def get_user(cls, *, username: str):
-        sql = select(User).where(User.username == username)
-        row = await cls()._database.fetch_one(sql)
+        row = await cls()._db.fetchrow('select * from t_user where username = $1', username)
         if not row:
             return None
-        return models.UserInDB(**row)
+        return UserInDB(**row)
 
     @classmethod
     async def add_user(cls, *, username: str, password: str):
-        sql = insert(User).values(username=username,
-                                  password=password,
-                                  register_date=datetime.datetime.now())
         try:
-            await cls()._database.execute(sql)
+            await cls().execute('insert into t_user (username, password, register_date) '
+                                'values ($1, $2, $3)', username, password,
+                                datetime.datetime.now())
             return True
         except Exception as e:
             log.error(f'try add_user into db failed: username={username}, e={e}')
@@ -53,6 +49,6 @@ class DB:
 
     @classmethod
     async def get_user_password_secret_key(cls):
-        sql = select(Dictionary).where(Dictionary.key == 'user_password_secret_key')
-        row = await cls()._database.fetch_one(sql)
-        return models.Dictionary(**row).value
+        row = await cls()._db.fetchrow('select * from t_dictionary where key = $1',
+                                       'user_password_secret_key')
+        return Dictionary(**row).value

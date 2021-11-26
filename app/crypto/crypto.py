@@ -5,7 +5,7 @@ from passlib.context import CryptContext
 from jose import jwt
 from app import log
 from app.routes.models import User, UserInDB, TokenData
-from app.db.db import DB
+from app.db import DB
 
 
 ALGORITHM = 'HS256'
