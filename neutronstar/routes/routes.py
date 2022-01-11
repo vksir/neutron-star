@@ -1,11 +1,11 @@
 from fastapi import Request, Depends, Response, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-from app import app
-from app.common.constants import *
-from app.crypto.crypto import Crypto
-from app.db import DB
-from app.routes.models import *
-from app.routes import depends
+from neutronstar import app
+from neutronstar.common.constants import *
+from neutronstar.crypto.crypto import Crypto
+from neutronstar.db import DB
+from neutronstar.routes.models import *
+from neutronstar.routes import depends
 
 
 @app.on_event('startup')

@@ -1,5 +1,5 @@
 import logging
-from app.common.constants import LOG_PATH
+from neutronstar.common.constants import LOG_PATH
 
 
 log = logging.getLogger(__name__)

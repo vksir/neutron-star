@@ -3,10 +3,10 @@ import platform
 from fastapi import HTTPException, status
 
 
-USER_HOME = os.environ['HOME'] if platform.system() == 'Linux' else os.environ['USERPROFILE']
-HOME = f'{USER_HOME}/.ns'
-CFG_PATH = f'{HOME}/cfg.yaml'
-LOG_PATH = f'{HOME}//neutron-star.log'
+HOME = os.environ['HOME'] if platform.system() == 'Linux' else os.environ['USERPROFILE']
+CFG_DIR = f'{HOME}/.ns'
+CFG_PATH = f'{CFG_DIR}/cfg.yaml'
+LOG_PATH = f'{CFG_DIR}/neutron_star.log'
 
 
 TOKEN_TYPE_BEARER = 'bearer'

@@ -3,9 +3,9 @@ import time
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from jose import jwt
-from app import log
-from app.routes.models import User, UserInDB, TokenData
-from app.db import DB
+from neutronstar import log
+from neutronstar.routes.models import User, UserInDB, TokenData
+from neutronstar.db import DB
 
 
 ALGORITHM = 'HS256'

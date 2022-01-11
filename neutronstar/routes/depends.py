@@ -1,8 +1,8 @@
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from app import log
-from app.common.constants import *
-from app.crypto.crypto import Crypto
+from neutronstar import log
+from neutronstar.common.constants import *
+from neutronstar.crypto.crypto import Crypto
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')

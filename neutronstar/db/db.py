@@ -1,8 +1,8 @@
 import datetime
 import asyncpg
-from app.routes.models import UserInDB, Dictionary
-from app import log
-from app.common.utils import CFGParser
+from neutronstar.routes.models import UserInDB, Dictionary
+from neutronstar import log
+from neutronstar.common.utils import CFGParser
 
 
 class DB:

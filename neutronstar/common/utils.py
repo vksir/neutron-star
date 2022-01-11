@@ -2,7 +2,7 @@ import os
 import sys
 import subprocess
 import yaml
-from app.common import constants
+from neutronstar.common import constants
 
 
 def run_cmd(cmd: str):
@@ -10,8 +10,9 @@ def run_cmd(cmd: str):
 
 
 def init_path():
-    for path in dir(constants):
-        if (not path.endswith('HOME') and not path.endswith('DIR')) \
+    for path_name in dir(constants):
+        path = getattr(constants, path_name)
+        if (not path_name.endswith('HOME') and not path_name.endswith('DIR')) \
                 or os.path.exists(path):
             continue
         run_cmd(f'mkdir -p {path}')
