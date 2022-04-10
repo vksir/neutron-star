@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from neutronstar import log
 from neutronstar.common.constants import *
@@ -13,8 +13,8 @@ async def get_user(token: str = Depends(oauth2_scheme)):
         user = await Crypto.get_user(token=token)
     except Exception as e:
         log.error(f'get_user from token failed: e={e}')
-        raise HTTP_401_EXCEPTION
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Unauthorized')
 
     if not user:
-        raise HTTP_401_EXCEPTION
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Unauthorized')
     return user

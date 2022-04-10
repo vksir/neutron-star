@@ -2,6 +2,7 @@ from fastapi import Request, Depends, Response, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from neutronstar import app
 from neutronstar.common.constants import *
+from neutronstar.common.log import log
 from neutronstar.crypto.crypto import Crypto
 from neutronstar.db import DB
 from neutronstar.routes.models import *
@@ -40,7 +41,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     access_token = await Crypto.get_access_token(username=form_data.username,
                                                  password=form_data.password)
     if not access_token:
-        raise HTTP_401_EXCEPTION
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Unauthorized')
     return Token(access_token=access_token, token_type=TOKEN_TYPE_BEARER)
 
 
@@ -63,6 +64,12 @@ async def register(form_data: OAuth2PasswordRequestForm = Depends(),
 @app.get('/users/me')
 async def read_me(user: User = Depends(depends.get_user)):
     return user
+
+
+@app.get('/verify/{component}')
+async def verify_component(nickname: str, uuid: str, user: User = Depends(depends.get_user)):
+    log.info(f'access verify: nickname={nickname}, uuid={uuid}, user={user}')
+    return Response()
 
 
 
