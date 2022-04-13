@@ -1,5 +1,3 @@
-import asyncio
-import time
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from jose import jwt
@@ -52,16 +50,12 @@ class Crypto:
 
     @classmethod
     async def get_user(cls, *, token: str):
-        try:
-            data = jwt.decode(token, await cls()._secret_key, algorithms=[ALGORITHM])
-            token_data = TokenData(**data)
-        except Exception as e:
-            log.info(f'invalid token: e={e}')
-            return None
+        data = jwt.decode(token, await cls()._secret_key, algorithms=[ALGORITHM])
+        token_data = TokenData(**data)
 
         user_db = await DB.get_user(username=token_data.username)
         if not user_db:
-            raise Exception(f'get_user from db failed: username={token_data.username}')
+            raise Exception(f'get_user {token_data.username} from db failed')
 
         return User(**user_db.dict())
 
