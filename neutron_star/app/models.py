@@ -14,7 +14,7 @@ class User(BaseModel):
     register_date: date
     birthday: Optional[date] = None
     sex: Optional[Sex] = None
-    nick_name: Optional[str] = None
+    nickname: Optional[str] = None
 
     class Config:
         orm_mode = True
@@ -36,3 +36,18 @@ class TokenData(BaseModel):
 class Dictionary(BaseModel):
     key: str = Field(...)
     value: Optional[str] = None
+
+
+class Host(BaseModel):
+    uuid: str
+    ip: str
+    port: int
+    username: str
+    nickname: str
+
+    class Config:
+        orm_mode = True
+
+
+class HostInDB(Host):
+    root_password: str = Field(..., alias='root_password')

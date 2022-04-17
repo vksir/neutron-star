@@ -1,8 +1,7 @@
 import os
 import sys
-import subprocess
 import yaml
-from neutronstar.common import constants
+from neutron_star.common.constants import FilePath
 
 
 def run_cmd(cmd: str):
@@ -10,8 +9,8 @@ def run_cmd(cmd: str):
 
 
 def init_path():
-    for path_name in dir(constants):
-        path = getattr(constants, path_name)
+    for path_name in dir(FilePath):
+        path = getattr(FilePath, path_name)
         if (not path_name.endswith('HOME') and not path_name.endswith('DIR')) \
                 or os.path.exists(path):
             continue
@@ -45,7 +44,7 @@ class CFGParser:
 
     @staticmethod
     def _read():
-        cfg_path = constants.CFG_PATH
+        cfg_path = FilePath.CFG_PATH
         if not os.path.exists(cfg_path):
             with open(cfg_path, 'w', encoding='utf-8') as f:
                 yaml.dump({}, f)
@@ -55,6 +54,6 @@ class CFGParser:
 
     @staticmethod
     def _write(data: dict):
-        cfg_path = constants.CFG_PATH
+        cfg_path = FilePath.CFG_PATH
         with open(cfg_path, 'w', encoding='utf-8') as f:
             yaml.dump(data, f)
