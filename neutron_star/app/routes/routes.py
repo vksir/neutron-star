@@ -38,10 +38,10 @@ async def test(request: Request, path):
     }
 
 
-@router.get('/{path:path}')
-@router.post('/{path:path}')
-@router.put('/{path:path}')
-@router.delete('/{path:path}')
+@router.get('/api/{path:path}')
+@router.post('/api/{path:path}')
+@router.put('/api/{path:path}')
+@router.delete('/api/{path:path}')
 async def dst_run(req: Request,
                   uuid: str = Header(...),
                   component: str = Header(...),
