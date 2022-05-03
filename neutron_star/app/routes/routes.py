@@ -64,7 +64,6 @@ async def dst_run(req: Request,
 
     method = req.method
     path = req.path_params['path']
-    params = req.query_params
     headers = dict(req.headers)
     body = await req.body()
 
@@ -72,10 +71,10 @@ async def dst_run(req: Request,
         async with httpx.AsyncClient() as client:
             resp = await client.request(
                 method=method,
-                url=f'http://{ip}:{port}/{path}',
-                params=params,
+                url=f'http://{ip}:{port}/{path}?{req.query_params}',
                 headers=headers,
-                content=body
+                content=body,
+                timeout=30
             )
     except Exception as e:
         return Response(content=e,
